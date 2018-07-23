@@ -1,0 +1,20 @@
+#!/bin/bash
+make clean
+make
+CORE="0"
+PROGRAM="matmult"
+echo Profiling program $PROGRAM on core $CORE
+
+echo ================================================================================
+echo
+
+for i in FLOPS_DP L2 L2CACHE
+do
+	echo Measuring performance for event group $i \
+	     using the marker api...
+
+	likwid-perfctr -C $CORE -g $i -m ./$PROGRAM 2048x2048-1 2048x2048-2 C.out 
+
+	echo ================================================================================
+	echo
+done
